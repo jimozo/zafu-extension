@@ -1,0 +1,28 @@
+name: Verify fingerprint
+
+# Re-runs the fingerprint computation on every push to the public mirror.
+# Fails if the source fingerprint drifts from what is hard-coded into the
+# extension popup/book at sync time. Intended to live in the public
+# `zafu-extension` repo (synced over from the private monorepo).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  fingerprint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Compute and verify fingerprint
+        run: node scripts/fingerprint.js --verbose

@@ -1,0 +1,21 @@
+{
+  "_comment": "Curated list of well-known public contracts. Addresses are lowercase. Stage 3 comparator surfaces these as KNOWN_PUBLIC.",
+  "contracts": [
+    { "address": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45", "label": "Uniswap V3 Router 2", "chain": "ethereum" },
+    { "address": "0xe592427a0aece92de3edee1f18e0157c05861564", "label": "Uniswap V3 Router", "chain": "ethereum" },
+    { "address": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d", "label": "Uniswap V2 Router", "chain": "ethereum" },
+    { "address": "0x1111111254eeb25477b68fb85ed929f73a960582", "label": "1inch Router V5", "chain": "ethereum" },
+    { "address": "0x9008d19f58aabd9ed0d60971565aa8510560ab41", "label": "CoW Protocol Settlement", "chain": "ethereum" },
+    { "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", "label": "WETH", "chain": "ethereum" },
+    { "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48", "label": "USDC", "chain": "ethereum" },
+    { "address": "0xdac17f958d2ee523a2206206994597c13d831ec7", "label": "Tether USDT", "chain": "ethereum" },
+    { "address": "0x6b175474e89094c44da98b954eedeac495271d0f", "label": "DAI", "chain": "ethereum" },
+    { "address": "0xae7ab96520de3a18e5e111b5eaab095312d7fe84", "label": "Lido stETH", "chain": "ethereum" },
+    { "address": "0xae78736cd615f374d3085123a210448e74fc6393", "label": "RocketPool rETH", "chain": "ethereum" },
+    { "address": "0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2", "label": "Aave V3 Pool", "chain": "ethereum" },
+    { "address": "0xc36442b4a4522e871399cd717abdd847ab11fe88", "label": "Uniswap V3 Positions NFT", "chain": "ethereum" },
+    { "address": "0x4dbd4fc535ac27206064b68ffcf827b0a60bab3f", "label": "Arbitrum Inbox (L1)", "chain": "ethereum" },
+    { "address": "0x99c9fc46f92e8a1c0dec1b1747d010903e884be1", "label": "Optimism L1 Bridge", "chain": "ethereum" },
+    { "address": "0x3154cf16ccdb4c6d922629664174b904d80f2c35", "label": "Base L1 Bridge", "chain": "ethereum" }
+  ]
+}

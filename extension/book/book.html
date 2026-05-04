@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zafu — Full View</title>
+  <link rel="icon" type="image/png" href="../icons/icon48.png" />
+  <link rel="stylesheet" href="../shared/tokens.css" />
+  <link rel="stylesheet" href="book.css" />
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <span class="logo">
+        <img class="logo-mark" src="../icons/icon.svg" width="18" height="18" alt="" aria-hidden="true" />
+        <span>ZAFU</span>
+      </span>
+      <span class="page-title">Address Book</span>
+    </div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="book">Address Book</button>
+      <button class="tab-btn" data-tab="wallets">Protected Wallets</button>
+      <button class="tab-btn" data-tab="guide">How It Works</button>
+      <button class="tab-btn" data-tab="safety">Safety</button>
+      <button class="tab-btn" data-tab="settings">Settings</button>
+      <button class="tab-btn" data-tab="community">Community</button>
+    </nav>
+  </header>
+
+  <!-- ===== ADDRESS BOOK TAB ===== -->
+  <div id="tab-book" class="tab-panel active">
+    <div class="layout">
+
+      <aside class="sidebar">
+        <div class="filter-group">
+          <div class="filter-label">Type</div>
+          <button class="filter-btn active" data-filter-type="all">All <span id="count-all" class="filter-count"></span></button>
+          <button class="filter-btn" data-filter-type="trusted">Trusted <span id="count-trusted" class="filter-count"></span></button>
+          <button class="filter-btn" data-filter-type="suspicious">Suspicious <span id="count-suspicious" class="filter-count"></span></button>
+          <button class="filter-btn" data-filter-type="starred">★ Starred</button>
+        </div>
+
+        <div class="filter-group" id="wallet-group">
+          <div class="filter-label">Wallet</div>
+          <div id="wallet-filter-buttons">
+            <button class="filter-btn active" data-filter-wallet="all">All wallets</button>
+          </div>
+        </div>
+
+        <div class="filter-group" id="reason-group">
+          <div class="filter-label">Reason (suspicious)</div>
+          <button class="filter-btn active" data-filter-reason="all">All reasons</button>
+          <button class="filter-btn" data-filter-reason="inbound-or-zero-value">Sent funds to you</button>
+          <button class="filter-btn" data-filter-reason="zero-value-token">Spam / dust token</button>
+          <button class="filter-btn" data-filter-reason="token-transfer">Token transfer</button>
+          <button class="filter-btn" data-filter-reason="inbound">Inbound transfer</button>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">Sort by</div>
+          <button class="filter-btn active" data-sort="lastSeen">Last seen</button>
+          <button class="filter-btn" data-sort="txCount">Tx count</button>
+          <button class="filter-btn" data-sort="label">Name A–Z</button>
+        </div>
+      </aside>
+
+      <main class="main">
+        <div class="table-header">
+          <div class="table-header-left">
+            <input id="search" type="text" placeholder="Search address or name…" class="search" />
+            <span id="results-label" class="results-label"></span>
+          </div>
+          <div class="pagination">
+            <button id="prev-btn" class="btn-ghost small" disabled>← Prev</button>
+            <span id="page-label" class="page-label"></span>
+            <button id="next-btn" class="btn-ghost small" disabled>Next →</button>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th class="col-type">Type</th>
+              <th class="col-address">Address</th>
+              <th class="col-label">Name</th>
+              <th class="col-meta">Activity</th>
+              <th class="col-reason">Reason</th>
+              <th class="col-actions"></th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+
+        <p id="empty-msg" class="empty-msg hidden">No addresses match your filters.</p>
+      </main>
+    </div>
+  </div>
+
+  <!-- ===== WALLETS TAB ===== -->
+  <div id="tab-wallets" class="tab-panel">
+    <div class="content-panel">
+
+      <div class="panel-header">
+        <h2>Protected wallets</h2>
+        <button id="toggle-add-btn" class="btn-ghost">+ Add wallet</button>
+      </div>
+
+      <div id="add-wallet-form-container" class="hidden form-card">
+        <form id="add-wallet-form" autocomplete="off">
+          <div class="field-row">
+            <div class="field">
+              <label for="wallet-address">Public address</label>
+              <input id="wallet-address" type="text" placeholder="0x… or Solana address" spellcheck="false" required />
+            </div>
+            <div class="field">
+              <label for="wallet-label">Name (optional)</label>
+              <input id="wallet-label" type="text" placeholder="e.g. My MetaMask" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Add &amp; Fetch History</button>
+            <p id="add-error" class="error hidden"></p>
+          </div>
+        </form>
+        <p class="field-hint">Public address only. ZAFU watches this wallet's history for protection and cannot connect to it or move funds.</p>
+      </div>
+
+      <div id="wallet-cards"></div>
+      <div id="no-wallets" class="muted-center hidden">
+        <p>No protected wallets added yet.</p>
+        <button id="book-empty-add-wallet-btn" class="btn-primary" type="button">+ Add your first wallet</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== HOW IT WORKS TAB ===== -->
+  <div id="tab-guide" class="tab-panel">
+    <div class="content-panel content-panel--text">
+
+      <h1 class="guide-title">How Zafu Works</h1>
+      <p class="guide-lead">Zafu watches every address you paste into crypto sites and checks it against your transaction history before it reaches the field. It runs entirely on your device — no keys, no signing, no external tracking.</p>
+
+      <h2 class="guide-h2">Detection Layers</h2>
+      <p class="guide-p">Every paste runs through 5 layers in order. First match wins.</p>
+      <ol class="guide-steps">
+        <li><strong>Clipboard guard</strong> — pasted address ≠ copied address → instant HIJACKED block. No network needed.</li>
+        <li><strong>Your history</strong> — trusted (you sent to) and suspicious (sent to you uninvited) addresses from your wallet transactions. Fully local.</li>
+        <li><strong>Curated blocklist</strong> — 10,000+ confirmed scam addresses bundled and refreshed weekly from ScamSniffer. No network needed.</li>
+        <li><strong>Community blocklist</strong> — crowd-sourced attacker addresses flagged by Zafu users. Fetched on startup, updated every 24h.</li>
+        <li><strong>GoPlus Security</strong> — real-time on-chain reputation API for EVM addresses. Last-resort check when all local layers return unknown.</li>
+      </ol>
+
+      <h2 class="guide-h2">Getting Started</h2>
+      <ol class="guide-steps">
+        <li>Open the <strong>Settings</strong> tab and paste your Etherscan API key (free at etherscan.io/apidashboard)</li>
+        <li>Go to the <strong>Wallets</strong> tab and add your public wallet address</li>
+        <li>Click <strong>Fetch</strong> — Zafu loads your full transaction history and builds your trusted address index</li>
+        <li>That's it. From now on, Zafu runs automatically whenever you paste an address on a supported crypto site</li>
+      </ol>
+
+      <h2 class="guide-h2">What You'll See When You Paste</h2>
+      <table class="guide-states-table">
+        <thead>
+          <tr>
+            <th>What you see</th>
+            <th>What it means</th>
+            <th>What to do</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-ok">
+            <td>✓ Green banner</td>
+            <td>Address is in your trusted history</td>
+            <td>Nothing — paste auto-completes in 2s</td>
+          </tr>
+          <tr class="row-unknown">
+            <td>? Unfamiliar address</td>
+            <td>Never seen before</td>
+            <td>Verify manually, check the box, then confirm</td>
+          </tr>
+          <tr class="row-warn">
+            <td>⚠ Suspicious address</td>
+            <td>In your history but you never sent to it</td>
+            <td>Likely an airdrop or spam — proceed with caution</td>
+          </tr>
+          <tr class="row-danger">
+            <td>🚨 Possible poisoning</td>
+            <td>Almost identical to a trusted address</td>
+            <td>Do not proceed — verify on Etherscan first</td>
+          </tr>
+          <tr class="row-danger">
+            <td>🚨 Clipboard hijacked</td>
+            <td>What you copied ≠ what's about to paste</td>
+            <td>Cancel immediately — scan your computer for malware</td>
+          </tr>
+          <tr class="row-blocked">
+            <td>⛔ Known scam</td>
+            <td>Flagged in our blocklist</td>
+            <td>Blocked — cannot be overridden</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 class="guide-h2">Guardian Mode</h2>
+      <p class="guide-p">Guardian Mode adds a paste preview step before every crypto-address paste. You'll see the address (and the resolved wallet address if you pasted an ENS name like <code>vitalik.eth</code>) before Zafu runs its full detection pipeline.</p>
+      <p class="guide-p">This catches ENS phishing — where a fake ENS name resolves to an attacker's wallet instead of the expected one. Enable Guardian Mode in the <strong>Settings</strong> tab.</p>
+
+      <h2 class="guide-h2">Trusted vs. Suspicious</h2>
+      <p class="guide-p"><strong class="text-ok">Trusted addresses</strong> are ones you actively sent ETH or tokens to. These get the green banner on paste and auto-confirm.</p>
+      <p class="guide-p"><strong class="text-warn">Suspicious addresses</strong> appeared in your transaction history but you never initiated a send to them — airdrops, dust attacks, spam token transfers, inbound payments from unknown sources. Zafu keeps these clearly separate. You can promote any suspicious address to trusted after giving it a label.</p>
+
+      <h2 class="guide-h2">Supported Sites</h2>
+      <p class="guide-p">Zafu intercepts pastes on Uniswap, 1inch, MetaMask, Rabby, Coinbase Wallet, Binance, Kraken, Aave, Compound, Etherscan, PolygonScan, and 30+ more crypto interfaces. On all other sites, it monitors input labels (recipient, send, withdraw) and intervenes if an address-shaped input is detected.</p>
+
+    </div>
+  </div>
+
+  <!-- ===== SAFETY TAB ===== -->
+  <div id="tab-safety" class="tab-panel">
+    <div class="content-panel content-panel--text">
+
+      <h1 class="guide-title">Security &amp; Trust</h1>
+      <p class="guide-lead">Zafu is designed so you can verify everything yourself. No trust required.</p>
+
+      <h2 class="guide-h2">Your Install Fingerprint</h2>
+      <p class="guide-p">Every Zafu release ships with a 16-character fingerprint computed from the security-critical source files and bundled risk data. Compare your fingerprint below against the one published in the GitHub release to confirm your install is unmodified.</p>
+      <div class="fingerprint-card">
+        <div class="fingerprint-row">
+          <span class="fp-label">Version</span>
+          <span id="fp-version" class="fp-value">—</span>
+        </div>
+        <div class="fingerprint-row">
+          <span class="fp-label">Fingerprint</span>
+          <span id="fp-hash" class="fp-value fp-mono">computing…</span>
+        </div>
+      </div>
+      <a id="verify-link" href="#" class="btn-verify">Compare on GitHub Releases ↗</a>
+
+      <h2 class="guide-h2">What Zafu Can and Cannot Do</h2>
+      <table class="safety-table">
+        <thead>
+          <tr><th class="th-can">Can</th><th class="th-cannot">Cannot</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>See your public wallet address</td>
+            <td>Access private keys or seed phrases</td>
+          </tr>
+          <tr>
+            <td>Read Etherscan transaction history</td>
+            <td>Sign or send transactions</td>
+          </tr>
+          <tr>
+            <td>Intercept address-shaped pastes</td>
+            <td>Move or access your funds</td>
+          </tr>
+          <tr>
+            <td>Store data locally on your device</td>
+            <td>Share private labels or notes without optional sign-in</td>
+          </tr>
+          <tr>
+            <td>Open Etherscan links in new tabs</td>
+            <td>Execute code on any website</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 class="guide-h2">Permissions</h2>
+      <p class="guide-p">Zafu requests <strong>4 permissions</strong>. The average Chrome extension requests 17.</p>
+      <table class="perms-table">
+        <tr>
+          <td><code>storage</code></td>
+          <td>Saves your wallet list, address index, settings, and local community cache.</td>
+        </tr>
+        <tr>
+          <td><code>tabs</code></td>
+          <td>Opens Zafu pages and clicked links in new tabs.</td>
+        </tr>
+        <tr>
+          <td><code>alarms</code></td>
+          <td>Schedules 24h refreshes for opted-in wallets and community intelligence.</td>
+        </tr>
+        <tr>
+          <td><code>identity</code></td>
+          <td>Optional Google Sign-In for address-book backup and restore.</td>
+        </tr>
+      </table>
+      <p class="guide-p">No <code>webRequest</code>, no <code>nativeMessaging</code>, no <code>clipboardRead</code>. Zafu cannot sign transactions, move funds, or read private keys — by architecture, not policy.</p>
+
+      <h2 class="guide-h2">Zero Telemetry</h2>
+      <p class="guide-p">No analytics, no error reporting, no advertising tracking. Your labels, notes, and trusted contacts stay local unless you choose Google Sign-In for address-book backup. Community threat signals can share suspected attacker addresses and signal types to protect other users.</p>
+
+      <h2 class="guide-h2">Public Source</h2>
+      <p class="guide-p">The Chrome extension source is public and auditable. No bundler, no npm dependencies, no CDN scripts. What you read is what runs. The strict Content Security Policy enforces this at the browser level — no eval, no remote script injection possible.</p>
+
+      <h2 class="guide-h2">Found a Vulnerability?</h2>
+      <p class="guide-p">Email <strong>security@stayzafu.com</strong> before public disclosure. We respond within 48 hours and credit all responsible disclosures.</p>
+
+    </div>
+  </div>
+
+  <!-- ===== SETTINGS TAB ===== -->
+  <div id="tab-settings" class="tab-panel">
+    <div class="content-panel content-panel--settings">
+
+      <div class="settings-block">
+        <div class="settings-block-header">
+          <div>
+            <div class="settings-block-title">Guardian Mode</div>
+            <div class="settings-block-desc">Pre-resolves ENS names before paste and shows a one-click confirm. Catches ENS phishing. Adds one extra step per paste.</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="guardian-toggle" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="settings-block">
+        <div class="settings-block-title">Export Address Book</div>
+        <div class="settings-block-desc">Download your trusted and suspicious addresses as JSON. Use as a backup or to transfer to another device.</div>
+        <button id="export-contacts-btn" class="btn-ghost" type="button">Export contacts (.json)</button>
+      </div>
+
+      <div class="settings-block">
+        <div class="settings-block-title">Etherscan API Key</div>
+        <div class="settings-block-desc">Free Etherscan key. Without one, fetches may rate-limit at ~10k tx. Free at etherscan.io/apidashboard.</div>
+        <div class="api-key-row">
+          <input id="api-key-input" type="password" placeholder="Paste your key here" spellcheck="false" />
+          <button id="save-api-key-btn" class="btn-ghost" type="button">Save</button>
+        </div>
+        <p id="api-key-status" class="hint hidden"></p>
+        <ol class="api-steps">
+          <li>Open <a id="etherscan-link" href="#" class="link-text">etherscan.io/apidashboard</a> (free account)</li>
+          <li>Click <strong>Add</strong> → name it "Zafu" → copy the key</li>
+          <li>Paste it above and click Save</li>
+        </ol>
+      </div>
+
+      <div class="settings-block">
+        <div class="settings-block-title">Solscan API Key (optional)</div>
+        <div class="settings-block-desc">Used for Solana transaction-history sync (Re-sync on Solana wallets). Without a key, the free public API is used (limited). Paste-time protection works without a key.</div>
+        <div class="api-key-row">
+          <input id="solscan-key-input" type="password" placeholder="Paste your Solscan key here" spellcheck="false" />
+          <button id="save-solscan-key-btn" class="btn-ghost" type="button">Save</button>
+        </div>
+        <p id="solscan-key-status" class="hint hidden"></p>
+        <ol class="api-steps">
+          <li>Open <a id="solscan-link" href="#" class="link-text">pro-api.solscan.io</a> (free account)</li>
+          <li>Dashboard → <strong>API Keys</strong> → <strong>New Key</strong> → copy it</li>
+          <li>Paste above and click Save</li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== COMMUNITY TAB ===== -->
+  <div id="tab-community" class="tab-panel">
+    <div class="content-panel content-panel--text">
+
+      <h1 class="guide-title">Community</h1>
+
+      <div class="settings-block" id="book-community-account-section">
+        <div class="settings-block-title">Back up your Zafu address book</div>
+        <div class="settings-block-desc">Sign in to recover saved wallets, trusted contacts, labels, and notes when you reinstall Chrome or switch computers.</div>
+        <div id="book-community-signed-out">
+          <button id="book-community-sign-in-btn" class="btn-google" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Sign in with Google
+          </button>
+          <p id="book-community-sign-in-error" class="hint hidden"></p>
+        </div>
+        <div id="book-community-signed-in" class="hidden">
+          <div class="account-row">
+            <img id="book-community-account-avatar" class="account-avatar" src="" alt="" width="28" height="28" />
+            <div class="account-info">
+              <div id="book-community-account-name" class="account-name"></div>
+              <div id="book-community-account-email" class="account-email"></div>
+            </div>
+            <button id="book-community-sign-out-btn" class="btn-ghost" type="button">Sign out</button>
+          </div>
+          <p id="book-community-sync-status" class="guide-p">Sync on — saved wallets and trusted contacts are backed up.</p>
+        </div>
+      </div>
+
+      <div class="settings-block">
+        <div class="settings-block-title">Community Blocklist</div>
+        <div class="settings-block-desc">A shared blocklist of high-risk addresses reported by Zafu users and automated signals. Active on every crypto-address paste.</div>
+        <div id="book-community-stat" class="community-stat-row">
+          <span id="book-community-list-count" class="community-stat-value">—</span>
+          <span class="community-stat-label">addresses in community blocklist</span>
+        </div>
+        <p id="book-community-list-delta" class="guide-p community-stat-delta hidden"></p>
+        <p id="book-community-pending-reports" class="guide-p community-pending hidden"></p>
+      </div>
+
+      <h2 class="guide-h2">How This Works</h2>
+      <ol class="guide-steps">
+        <li><strong>Auto-detection</strong> — when Zafu indexes your wallet history, dust and zero-value inbound transactions are quietly submitted as community signals.</li>
+        <li><strong>One-click flagging</strong> — tap "Report as malicious" on any unknown address overlay. Multiple users flagging the same address promotes it to the blocklist.</li>
+        <li><strong>Threshold review</strong> — addresses crossing the signal threshold are analyzed on-chain and reviewed before being added.</li>
+        <li><strong>Sign in for backup</strong> — saved wallets, trusted contacts, labels, and notes follow your Google account.</li>
+      </ol>
+
+      <h2 class="guide-h2">Share &amp; Feedback</h2>
+      <div class="settings-block">
+        <div class="settings-block-desc">Help protect others in your network.</div>
+        <button id="book-community-share-btn" class="btn-ghost" type="button">Share Zafu</button>
+      </div>
+      <div class="settings-block">
+        <div class="settings-block-desc">Upvote features, report bugs, and shape the roadmap.</div>
+        <a id="book-community-feedback-btn" href="#" class="btn-ghost">Open Feedback Board →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Promote modal -->
+  <div id="promote-modal-container"></div>
+
+  <script src="book.js" type="module"></script>
+</body>
+</html>
