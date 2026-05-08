@@ -1,0 +1,97 @@
+{
+  "manifest_version": 3,
+  "name": "Zafu — Zero-trust Address Framework for Users",
+  "version": "1.1.2",
+  "description": "Catches address poisoning and clipboard hijacking before you send. Works on wallet and exchange sites. Never touches your keys.",
+  "permissions": [
+    "storage",
+    "tabs",
+    "alarms",
+    "identity"
+  ],
+  "oauth2": {
+    "client_id": "447227799690-ehbjf4bulrl6o3cjec917kufn6cib0h0.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile"
+    ]
+  },
+  "host_permissions": [
+    "https://api.etherscan.io/*",
+    "https://*.etherscan.io/*",
+    "https://cloudflare-eth.com/*",
+    "https://api.thegraph.com/*",
+    "https://api.gopluslabs.io/*",
+    "https://api.coingecko.com/*",
+    "https://public-api.solscan.io/*",
+    "https://pro-api.solscan.io/*",
+    "https://www.googleapis.com/*",
+    "https://*.supabase.co/*"
+  ],
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content/content-script.js"
+      ],
+      "type": "module",
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Zafu",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'; img-src 'self' https://lh3.googleusercontent.com; connect-src https://api.etherscan.io https://*.etherscan.io https://cloudflare-eth.com https://api.thegraph.com https://api.gopluslabs.io https://api.coingecko.com https://public-api.solscan.io https://pro-api.solscan.io https://www.googleapis.com https://*.supabase.co;"
+  },
+  "commands": {
+    "open-contact-picker": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Z",
+        "mac": "Command+Shift+Z"
+      },
+      "description": "Open Zafu contact picker"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "data/*.json",
+        "overlay/overlay.css",
+        "overlay/overlay.js",
+        "lib/*.js",
+        "content/contact-picker.js",
+        "content/contact-picker.css"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    },
+    {
+      "resources": [
+        "onboarding/onboarding.html"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}

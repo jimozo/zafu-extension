@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Welcome to Zafu</title>
+  <link rel="icon" type="image/png" href="../icons/icon48.png" />
+  <link rel="stylesheet" href="../shared/tokens.css" />
+  <link rel="stylesheet" href="onboarding.css" />
+</head>
+<body>
+  <div class="container">
+
+    <!-- Step indicators -->
+    <div class="steps">
+      <div class="step active" data-step="0"></div>
+      <div class="step" data-step="1"></div>
+      <div class="step" data-step="2"></div>
+      <div class="step" data-step="3"></div>
+    </div>
+
+    <!-- Panel 0: Welcome -->
+    <div id="panel-0" class="panel active">
+      <div class="panel-icon">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 3.5L33.5 9V19C33.5 27.5 27.5 34.5 20 36.5C12.5 34.5 6.5 27.5 6.5 19V9L20 3.5Z" stroke-linejoin="round"/>
+          <path d="M13.5 20L17.5 24L26.5 16" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h1>Send to the right address. Every time.</h1>
+      <p class="lead">Address poisoning and clipboard hijacking drained <strong>$300M+</strong> from crypto users in January 2026 alone. Zafu stops it at paste time — before it reaches your wallet.</p>
+
+      <!-- Visual threat demo: shows the problem Zafu solves -->
+      <div class="threat-demo" aria-label="Address poisoning example">
+        <div class="demo-row demo-row--safe">
+          <span class="demo-label">Your trusted address</span>
+          <div class="demo-addr"><span>0x742d35Cc6634</span><span class="demo-match">C4a</span><span>52Fb96c1ea03</span></div>
+        </div>
+        <div class="demo-row demo-row--danger">
+          <span class="demo-label">What you might paste</span>
+          <div class="demo-addr"><span>0x742d35Cc6634</span><span class="demo-differ">C0a</span><span>52Fb96c1ea03</span></div>
+        </div>
+        <div class="demo-caption">1 character swapped. Funds gone. Zafu catches this.</div>
+      </div>
+
+      <ul class="benefits">
+        <li>
+          <span class="check">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          <div><strong>Clipboard hijacking</strong> — malware silently replaces your copied address. Zafu catches it instantly.</div>
+        </li>
+        <li>
+          <span class="check">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          <div><strong>Address poisoning</strong> — attackers plant near-identical lookalike addresses. Zafu highlights the difference.</div>
+        </li>
+        <li>
+          <span class="check">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          <div><strong>Works everywhere</strong> — MetaMask, Rabby, Binance, Kraken, Uniswap. No seed phrase. No wallet connection.</div>
+        </li>
+      </ul>
+      <button class="btn-primary" data-next="1">Set up Zafu →</button>
+    </div>
+
+    <!-- Panel 1: Add Wallet -->
+    <div id="panel-1" class="panel">
+      <div class="panel-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M16 10a2 2 0 000 4h4V10z"/><path d="M6 2h12"/></svg>
+      </div>
+      <h1>Add your first wallet</h1>
+      <p class="lead">Zafu fetches your transaction history and builds a trusted address book automatically.</p>
+      <form id="add-wallet-form" autocomplete="off">
+        <div class="field">
+          <label for="wallet-address">Public address</label>
+          <div class="input-row">
+            <input id="wallet-address" type="text" placeholder="0x… or Solana address" spellcheck="false" required />
+            <span id="chain-pill" class="chain-pill hidden"></span>
+          </div>
+          <p class="field-hint" id="wallet-hint">EVM (Ethereum, Polygon, Arbitrum, Base, Optimism, BNB) and Solana supported.</p>
+        </div>
+        <div class="field">
+          <label for="wallet-label">Name (optional)</label>
+          <input id="wallet-label" type="text" placeholder="e.g. My MetaMask, Hardware wallet" />
+        </div>
+        <p id="wallet-error" class="error hidden"></p>
+        <div id="fetch-progress" class="progress hidden"></div>
+        <button type="submit" class="btn-primary">Add &amp; Fetch History</button>
+      </form>
+      <p id="fetch-success-msg" class="fetch-success hidden"></p>
+      <button id="done-btn" class="btn-primary done-btn hidden" data-next="2">Continue →</button>
+      <button id="skip-wallet-btn" class="btn-skip" type="button">Skip for now →</button>
+    </div>
+
+    <!-- Panel 2: Success + Pin -->
+    <div id="panel-2" class="panel">
+      <div class="panel-icon success-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+      </div>
+      <h1>You're protected.</h1>
+      <p class="lead" id="success-msg">Zafu is now watching your clipboard. Paste any address on a crypto site to see it in action.</p>
+
+      <div class="pin-steps">
+        <div class="pin-steps-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5M9 10.76V6a3 3 0 116 0v4.76a2 2 0 00.79 1.58l1.21.92a2 2 0 01.79 1.58V17H6.21V14.84a2 2 0 01.79-1.58l1.21-.92A2 2 0 009 10.76z"/></svg>
+          Pin Zafu to your toolbar
+        </div>
+        <p class="pin-steps-desc">So you can open your address book with one click, anytime.</p>
+        <ol class="pin-ol">
+          <li><span class="pin-step-num">01</span> Click the <strong>puzzle icon</strong> in Chrome's toolbar</li>
+          <li><span class="pin-step-num">02</span> Find <strong>Zafu</strong> in the extensions list</li>
+          <li><span class="pin-step-num">03</span> Click the <strong>pin icon</strong> next to Zafu</li>
+        </ol>
+      </div>
+
+      <div class="try-zafu-block">
+        <p class="try-zafu-label">Never seen Zafu in action? Try the interactive test — no setup needed.</p>
+        <a id="try-zafu-onboarding-link" href="https://stayzafu.com/test" target="_blank" class="btn-ghost small">See Zafu in action →</a>
+      </div>
+
+      <p class="api-hint">Fetching slowly on large wallets? Add your own <a id="api-key-hint-link" href="#">free Etherscan API key</a> in Zafu → Settings.</p>
+
+      <button id="finish-btn" class="btn-primary" data-next="3">Next →</button>
+    </div>
+
+    <!-- Panel 3: Community Protection -->
+    <div id="panel-3" class="panel">
+      <div class="panel-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      </div>
+      <h1>Zafu gets smarter with every user.</h1>
+      <p class="lead">When you flag an attacker address — or Zafu auto-detects one in your transaction history — we add it to a shared blocklist that protects everyone.</p>
+
+      <ul class="benefits">
+        <li>
+          <span class="check">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          <div><strong>Auto-detection</strong> — dust and zero-value inbound transactions from your history are quietly submitted as signals.</div>
+        </li>
+        <li>
+          <span class="check">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          <div><strong>One-click flagging</strong> — when you see a suspicious address, tap Report. Multiple users flagging the same address promotes it to the blocklist.</div>
+        </li>
+        <li>
+          <span class="check">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          <div><strong>Anonymous by default</strong> — reports use a random install ID unless you choose Google sign-in for backup and account continuity.</div>
+        </li>
+      </ul>
+
+      <div id="onboarding-signin-section">
+        <p class="field-hint">Sign in to back up saved wallets, trusted contacts, labels, and notes. You can skip this and keep everything local.</p>
+        <button id="onboarding-sign-in-btn" class="btn-google" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          Sign in with Google
+        </button>
+        <p id="onboarding-signin-success" class="field-hint hidden">✓ Signed in as <span id="onboarding-signed-name"></span></p>
+        <p id="onboarding-signin-error" class="error hidden"></p>
+      </div>
+
+      <button id="launch-btn" class="btn-primary hidden">Open Zafu →</button>
+      <button id="skip-signin-btn" class="btn-ghost done-btn">Skip →</button>
+    </div>
+
+  </div>
+
+  <script src="onboarding.js" type="module"></script>
+</body>
+</html>

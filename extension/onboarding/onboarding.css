@@ -1,0 +1,499 @@
+/* Design tokens loaded from ../shared/tokens.css via onboarding.html */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 480px;
+  padding: 40px 24px;
+}
+
+/* Step dots */
+.steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 40px;
+}
+
+.step {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
+}
+
+/* Connecting line between dots */
+.step + .step {
+  margin-left: 28px;
+  position: relative;
+}
+.step + .step::before {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 1px;
+  background: var(--border);
+  margin-right: 2px;
+}
+.step.done + .step::before { background: var(--success); }
+
+.step.active {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+.step.done { background: var(--success); }
+
+/* Panels */
+.panel { display: none; }
+.panel.active { display: block; }
+
+.panel-icon {
+  font-size: 40px;
+  margin-bottom: 16px;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.lead {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+/* Benefit list */
+.benefits {
+  list-style: none;
+  margin-bottom: 32px;
+}
+
+.benefits li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.benefits li:last-child { border-bottom: none; }
+
+.check {
+  color: var(--success);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Form fields */
+.field { margin-bottom: 14px; }
+
+label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+input:focus { border-color: var(--accent); }
+input::placeholder { color: var(--muted); }
+
+.api-row {
+  display: flex;
+  gap: 8px;
+}
+
+.api-row input { flex: 1; }
+
+/* Buttons */
+.btn-primary {
+  display: block;
+  width: 100%;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.btn-primary:hover { filter: brightness(1.1); }
+.btn-primary:active { transform: scale(0.98) translateY(1px); transition: transform 0.08s ease; }
+.btn-primary:disabled { opacity: 0.5; cursor: default; }
+
+.btn-ghost {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn-ghost:active { transform: scale(0.97); transition: transform 0.08s ease; }
+
+/* Panel actions row */
+.panel-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.panel-actions .btn-ghost { flex: 0; }
+.panel-actions .btn-primary { flex: 1; margin-top: 0; width: auto; }
+
+/* Instructions */
+.instructions {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin: 14px 0 20px;
+  font-size: 13px;
+}
+
+.instructions p {
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.instructions ol {
+  padding-left: 18px;
+  color: var(--text);
+}
+
+.instructions li {
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.instructions strong { color: var(--accent); }
+
+.link {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.link:hover { text-decoration: underline; }
+
+/* Status + error */
+.status {
+  font-size: 12px;
+  color: var(--success);
+  margin-top: 6px;
+}
+
+.error {
+  font-size: 12px;
+  color: var(--danger);
+  margin-top: 6px;
+}
+
+.fetch-success {
+  font-size: 13px;
+  color: var(--success);
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: 4px;
+}
+
+.hidden { display: none !important; }
+
+/* Progress */
+.progress {
+  font-size: 12px;
+  color: var(--muted);
+  font-style: italic;
+  padding: 6px 0;
+}
+
+/* Done button */
+.done-btn {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  text-align: center;
+}
+
+/* Input row (address input + chain-detect pill) */
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-row input { flex: 1; }
+
+.chain-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.chain-pill--evm { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-bg-2); }
+.chain-pill--sol { background: rgba(153,69,255,0.12); color: #9945ff; border: 1px solid rgba(153,69,255,0.3); }
+
+/* Field hint (below selects/inputs) */
+.field-hint {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* Success panel icon */
+.success-icon { color: var(--success); }
+
+/* Pin steps card */
+.pin-steps {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+  margin: 16px 0 16px;
+}
+
+.pin-steps-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.pin-steps-desc {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.pin-ol {
+  padding-left: 0;
+  list-style: none;
+}
+
+.pin-ol li {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.55;
+  margin-bottom: 4px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: default;
+  transition: background 0.15s, color 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pin-ol li:hover {
+  background: var(--accent-bg);
+  color: var(--text);
+}
+
+.pin-ol li:hover .pin-step-num {
+  color: var(--accent);
+}
+
+.pin-ol strong { color: var(--accent); }
+
+/* API key hint */
+.api-hint {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.api-hint a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.api-hint a:hover { text-decoration: underline; }
+
+/* Benefits list — richer layout */
+.benefits li {
+  align-items: flex-start;
+}
+
+.benefits li .check {
+  color: var(--success);
+  margin-top: 2px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* ===== THREAT DEMO ===== */
+
+@keyframes differ-pulse {
+  0%, 100% { background: rgba(229, 72, 77, 0.12); }
+  50%       { background: rgba(229, 72, 77, 0.28); }
+}
+
+.threat-demo {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 0 0 24px;
+  font-family: var(--mono);
+}
+
+.demo-row {
+  margin-bottom: 10px;
+}
+
+.demo-row:last-of-type { margin-bottom: 0; }
+
+.demo-label {
+  display: block;
+  font-family: var(--font);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.demo-row--safe  .demo-label { color: var(--success); }
+.demo-row--danger .demo-label { color: var(--danger); }
+
+.demo-addr {
+  font-size: 12px;
+  color: var(--text-2);
+  word-break: break-all;
+  letter-spacing: 0.04em;
+}
+
+.demo-match {
+  color: var(--success);
+  font-weight: 700;
+}
+
+.demo-differ {
+  color: var(--danger);
+  font-weight: 700;
+  background: rgba(229, 72, 77, 0.12);
+  padding: 0 2px;
+  border-radius: 2px;
+  animation: differ-pulse 1.8s ease-in-out infinite;
+}
+
+.demo-caption {
+  font-family: var(--font);
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-style: italic;
+}
+
+/* Skip wallet button */
+.btn-skip {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 12px;
+  padding: 8px 0 0;
+  cursor: pointer;
+  text-align: center;
+}
+
+.btn-skip:hover { color: var(--text-2); }
+
+/* Try Zafu block (Panel 2 success screen) */
+.try-zafu-block {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.try-zafu-label {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.4;
+  flex: 1;
+}
+
+/* ===== PIN STEP NUMBERS ===== */
+
+.pin-steps-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.pin-step-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  min-width: 22px;
+  display: inline-block;
+}
