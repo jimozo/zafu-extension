@@ -1,0 +1,6 @@
+{
+  "_comment": "Zafu team-curated confirmed malicious addresses. EVM addresses lowercase. Solana addresses case-preserved (base58 is case-sensitive). Submit reports via GitHub Issues.",
+  "_version": "2026-04-23",
+  "_source": "https://github.com/jimozo/zafu/issues",
+  "addresses": []
+}

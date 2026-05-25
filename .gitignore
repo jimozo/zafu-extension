@@ -1,0 +1,23 @@
+# Build artifacts
+*.zip
+*.crx
+*.pem
+
+# macOS / Windows metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+
+# Node (forkers only — extension itself uses no deps)
+node_modules/
+npm-debug.log*
+
+# Local secrets — never commit
+.env
+.env.*

@@ -1,0 +1,113 @@
+/* contact-picker.css — shadow DOM styles for the Ctrl+Shift+Z on-page picker */
+
+:host {
+  /* Shadow DOM: cannot use ../shared/tokens.css — values match tokens.css exactly */
+  --bg:         #08090a;
+  --surface:    #191a1b;
+  --border:     rgba(255, 255, 255, 0.05);
+  --border-2:   rgba(255, 255, 255, 0.08);
+  --text:       #f7f8f8;
+  --muted:      #62666d;
+  --accent:     #5e6ad2;
+  --accent-bg:  rgba(94, 106, 210, 0.10);
+  --accent-bg-2:rgba(94, 106, 210, 0.18);
+  --radius:     8px;
+  font-feature-settings: "cv01", "ss03";
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.picker-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 2147483647;
+  padding-top: 15vh;
+  font-family: -apple-system, system-ui, sans-serif;
+}
+
+.picker-panel {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 420px;
+  max-width: 90vw;
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+}
+
+.picker-search {
+  width: 100%;
+  background: var(--surface);
+  border: none;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  padding: 14px 16px;
+  outline: none;
+}
+
+.picker-search::placeholder { color: var(--muted); }
+
+.picker-list {
+  list-style: none;
+  overflow-y: auto;
+  flex: 1;
+  padding: 6px;
+  min-height: 0;
+}
+
+.picker-list::-webkit-scrollbar { width: 3px; }
+.picker-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.picker-item {
+  padding: 10px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 2px;
+  transition: background 0.1s;
+}
+
+.picker-item:hover { background: var(--surface); }
+
+.picker-item.active {
+  background: var(--accent-bg);
+  outline: 1px solid var(--accent-bg-2);
+}
+
+.picker-item-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.picker-item-addr {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 10px;
+  color: var(--muted);
+  word-break: break-all;
+}
+
+.picker-empty {
+  display: none;
+  padding: 24px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.picker-hint {
+  padding: 8px 16px;
+  font-size: 11px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}

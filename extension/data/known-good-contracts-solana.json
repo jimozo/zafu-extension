@@ -1,0 +1,21 @@
+{
+  "_description": "Curated canonical Solana program addresses. Exact-match lookup (case-sensitive base58). Used for KNOWN_PUBLIC detection step.",
+  "_note": "Add pool/vault addresses carefully — only top-level program IDs, not per-pool PDAs.",
+  "contracts": [
+    { "address": "11111111111111111111111111111111", "label": "System Program" },
+    { "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA", "label": "SPL Token Program" },
+    { "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb", "label": "Token-2022 Program" },
+    { "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJe1bRS", "label": "Associated Token Account Program" },
+    { "address": "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4", "label": "Jupiter Aggregator v6" },
+    { "address": "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8", "label": "Raydium AMM v4" },
+    { "address": "whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc", "label": "Orca Whirlpool" },
+    { "address": "MarBmsSgKXdrN1egZf5sqe1TMai9K1rChYNDJgjq7aD", "label": "Marinade Finance" },
+    { "address": "M2mx93ekt1fmXSVkTrUL9xVFHkmME8HTUi5Cyc5aF7K", "label": "Magic Eden v2" },
+    { "address": "TSWAPaqyCSx2KABk68Shruf4rp7CxcAi9gjGQv7Toph", "label": "Tensor Trade" },
+    { "address": "dRiftyHA39MWEi3m9aunc5MzRF1JYuBsbn6VPcn33UH", "label": "Drift Protocol" },
+    { "address": "KLend2g3cP87fffoy8q1mQqGKjrL1AyFArM3ymHe8b8", "label": "Kamino Lending" },
+    { "address": "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin", "label": "Serum DEX v3" },
+    { "address": "So11111111111111111111111111111111111111112", "label": "Wrapped SOL (wSOL)" },
+    { "address": "MangoCzJ36AjZyKwVj3VnYU4GTonjfVEnJmvvWaxLac", "label": "Mango Markets" }
+  ]
+}
