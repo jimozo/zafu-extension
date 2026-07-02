@@ -1,0 +1,746 @@
+/* Zafu overlay styles — injected into shadow DOM for isolation */
+
+:host {
+  /* Shadow DOM: cannot use ../shared/tokens.css — values must match tokens.css exactly.
+     Canonical source: website/_brand/BRAND.md */
+  --bg:      #08090a;
+  --surface: #191a1b;
+  --border:  rgba(255, 255, 255, 0.05);
+  --border-2:rgba(255, 255, 255, 0.08);
+  --text:    #f7f8f8;
+  --muted:   #62666d;
+  --accent:  #5e6ad2;
+  --ok:      #10b981;
+  --success: #10b981;
+  --warn:    #f5a524;
+  --warning: #f5a524;
+  --danger:  #e5484d;
+  --danger-bg: rgba(229, 72, 77, 0.10);
+  --accent-bg: rgba(94, 106, 210, 0.10);
+  --ok-bg:   rgba(16, 185, 129, 0.10);
+  --warn-bg: rgba(245, 165, 36, 0.10);
+  --malicious:    #8b1212;
+  --malicious-bg: rgba(139, 18, 18, 0.12);
+  --font: 'Inter', -apple-system, system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --ease-in:  cubic-bezier(0.4, 0, 1, 1);
+  font-feature-settings: "cv01", "ss03";
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+@keyframes banner-in {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+@keyframes banner-out {
+  from { transform: translateY(0);     opacity: 1; }
+  to   { transform: translateY(-100%); opacity: 0; }
+}
+
+@keyframes zafu-modal-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+@keyframes differ-pulse {
+  0%, 100% { background: rgba(229, 72, 77, 0.12); }
+  50%       { background: rgba(229, 72, 77, 0.30); }
+}
+
+.zafu-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border-bottom: 2px solid var(--ok);
+  padding: 12px 16px;
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text);
+  z-index: 2147483647;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: banner-in 0.22s var(--ease-out) forwards;
+}
+
+.zafu-banner.zafu-banner--exit {
+  animation: banner-out 0.18s var(--ease-in) forwards;
+}
+
+.zafu-banner-content {
+  flex: 1;
+}
+
+.zafu-banner-label {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.zafu-banner-meta {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.zafu-banner-close {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+.zafu-banner-close:hover {
+  color: var(--text);
+}
+
+/* Modal backdrop */
+.zafu-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 9, 10, 0.82);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2147483647;
+  font-family: var(--font);
+}
+
+.zafu-modal {
+  background: #0d0e10;
+  border: 1px solid var(--border-2);
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 460px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.46);
+  animation: zafu-modal-in 0.18s var(--ease-out) forwards;
+}
+
+/* Danger state modals: clear status without visual panic */
+.zafu-modal.zafu-state-poisoned,
+.zafu-modal.zafu-state-hijacked {
+  border-color: rgba(229, 72, 77, 0.45);
+  box-shadow:
+    inset 0 0 0 1px rgba(229, 72, 77, 0.08),
+    0 24px 80px rgba(0, 0, 0, 0.52);
+}
+
+/* Warning state modal: amber left accent */
+.zafu-modal.zafu-state-suspicious_known,
+.zafu-modal.zafu-state-clipboard_mismatch {
+  border-left: 3px solid var(--warn);
+}
+
+.zafu-modal-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.zafu-modal-title {
+  font-size: 16px;
+  font-weight: 590;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.zafu-state-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-width: 76px;
+  height: 24px;
+  padding: 0 9px;
+  border: 1px solid var(--border-2);
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.zafu-state-badge--known,
+.zafu-state-badge--known_public {
+  color: var(--ok);
+  border-color: rgba(16, 185, 129, 0.35);
+  background: var(--ok-bg);
+}
+
+.zafu-state-badge--unknown {
+  color: var(--accent);
+  border-color: rgba(94, 106, 210, 0.35);
+  background: var(--accent-bg);
+}
+
+.zafu-state-badge--transfer {
+  color: var(--ok);
+  border-color: rgba(16, 185, 129, 0.35);
+  background: var(--ok-bg);
+}
+
+.zafu-state-badge--suspicious_known,
+.zafu-state-badge--clipboard_mismatch,
+.zafu-state-badge--flagged {
+  color: var(--warn);
+  border-color: rgba(245, 165, 36, 0.35);
+  background: var(--warn-bg);
+}
+
+.zafu-state-badge--poisoned,
+.zafu-state-badge--hijacked,
+.zafu-state-badge--scam {
+  color: var(--danger);
+  border-color: rgba(229, 72, 77, 0.42);
+  background: var(--danger-bg);
+}
+
+.zafu-state-badge--malicious {
+  color: #ffb4b4;
+  border-color: rgba(139, 18, 18, 0.55);
+  background: var(--malicious-bg);
+}
+
+.zafu-modal-body {
+  margin-bottom: 16px;
+}
+
+.zafu-modal-text {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.zafu-modal-text.muted {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* R: recipient-named paste ritual — name the person + exact asset/network to confirm */
+.zafu-modal-ritual {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.5;
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
+  border-radius: 4px;
+}
+
+/* Address display in modal */
+.zafu-address-display {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin: 10px 0;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 12px;
+  color: var(--accent);
+  word-break: break-all;
+}
+
+/* Diff display for POISONED state */
+.zafu-diff-container {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  margin: 12px 0;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 12px;
+}
+
+.zafu-diff-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+  align-items: flex-start;
+}
+
+.zafu-diff-row:last-child {
+  margin-bottom: 0;
+}
+
+.zafu-diff-label {
+  min-width: 50px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* Colored diff labels — added by overlay.js for poisoned/hijacked states */
+.zafu-diff-label--safe {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--ok);
+  margin-bottom: 3px;
+  margin-top: 10px;
+}
+
+.zafu-diff-label--danger {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--danger);
+  margin-bottom: 3px;
+  margin-top: 10px;
+}
+
+.zafu-diff-label--warning {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--warn);
+  margin-bottom: 3px;
+  margin-top: 10px;
+}
+
+.zafu-diff-address {
+  flex: 1;
+  color: var(--text);
+  word-break: break-all;
+}
+
+.zafu-diff-address.highlight {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+/* Segmented address display */
+.zafu-segments {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+
+.zafu-segment {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.zafu-segment.differ {
+  background: rgba(229, 72, 77, 0.12);
+  border-color: var(--danger);
+  color: var(--danger);
+  font-weight: 700;
+  animation: differ-pulse 1.8s ease-in-out infinite;
+}
+
+.zafu-segment-sep {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+/* Checkbox */
+.zafu-checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0 4px;
+}
+
+.zafu-checkbox-required {
+  background: rgba(94, 106, 210, 0.06);
+  border: 1px solid rgba(94, 106, 210, 0.25);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+
+.zafu-checkbox-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.zafu-confirm-hint {
+  font-size: 11px;
+  color: var(--accent);
+  margin: 4px 0 0 2px;
+  opacity: 0.8;
+}
+
+/* Buttons */
+.zafu-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.zafu-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.zafu-btn-primary {
+  background: var(--accent);
+  color: #000;
+}
+
+.zafu-btn-primary:hover {
+  filter: brightness(1.1);
+}
+
+.zafu-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.zafu-btn-secondary {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.zafu-btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.zafu-btn-danger {
+  background: var(--danger-bg);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+}
+
+.zafu-btn-danger:hover {
+  background: rgba(229, 72, 77, 0.20);
+}
+
+.zafu-btn-warning {
+  background: var(--warn-bg);
+  border: 1px solid rgba(245, 165, 36, 0.45);
+  color: var(--warn);
+}
+
+.zafu-btn-warning:hover {
+  background: rgba(245, 165, 36, 0.18);
+}
+
+.zafu-btn-warning:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Safe/cancel action on danger modals — green prominence signals the safe choice */
+.zafu-btn-safe {
+  background: var(--ok);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+}
+
+.zafu-btn-safe:hover {
+  opacity: 0.9;
+}
+
+/* Smaller secondary button for risky override actions */
+.zafu-btn-sm {
+  flex: 0.55;
+  font-size: 11.5px;
+  padding: 8px;
+  opacity: 0.8;
+}
+
+.zafu-btn-sm:hover { opacity: 1; }
+
+/* State-specific styling */
+.zafu-state-known .zafu-modal-title {
+  color: var(--success);
+}
+
+.zafu-state-suspicious .zafu-modal-title {
+  color: var(--warning);
+}
+
+.zafu-state-clipboard_mismatch .zafu-modal-title {
+  color: var(--warn);
+}
+
+.zafu-state-poisoned .zafu-modal-title {
+  color: var(--danger);
+}
+
+.zafu-state-hijacked .zafu-modal-title {
+  color: var(--danger);
+}
+
+.zafu-state-scam .zafu-modal-title {
+  color: var(--danger);
+}
+
+.zafu-state-unknown .zafu-modal-title {
+  color: var(--accent);
+}
+
+/* Etherscan verification link */
+.zafu-etherscan-link {
+  display: inline-block;
+  font-size: 12px;
+  color: var(--accent);
+  text-decoration: none;
+  margin: 8px 0 4px;
+}
+
+.zafu-etherscan-link:hover {
+  text-decoration: underline;
+}
+
+/* Info box */
+.zafu-info-box {
+  background: rgba(94, 106, 210, 0.08);
+  border: 1px solid rgba(94, 106, 210, 0.2);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin: 12px 0;
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.zafu-info-box.neutral {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--border-2);
+}
+
+.zafu-info-box.warning {
+  background: rgba(245, 165, 36, 0.08);
+  border-color: rgba(245, 165, 36, 0.2);
+}
+
+.zafu-info-box.danger {
+  background: rgba(229, 72, 77, 0.08);
+  border-color: rgba(229, 72, 77, 0.2);
+}
+
+.zafu-btn-transfer {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.zafu-btn-transfer:hover {
+  opacity: 0.88;
+}
+
+/* Transfer Check */
+.zafu-state-transfer-check {
+  border-color: rgba(16, 185, 129, 0.32);
+}
+
+.zafu-state-transfer-check--unknown {
+  border-color: rgba(94, 106, 210, 0.30);
+}
+
+.zafu-state-transfer-check .zafu-modal-title {
+  color: var(--text);
+}
+
+.zafu-checklist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin: 12px 0;
+}
+
+.zafu-evidence-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.zafu-evidence-group {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.zafu-evidence-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.zafu-evidence-group .zafu-checklist {
+  margin: 0;
+}
+
+.zafu-checklist-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.zafu-checklist-row--ok .zafu-checklist-mark {
+  color: var(--ok);
+}
+
+.zafu-checklist-row--neutral .zafu-checklist-mark {
+  color: var(--muted);
+}
+
+.zafu-checklist-row--warn .zafu-checklist-mark {
+  color: var(--warn);
+}
+
+.zafu-checklist-mark {
+  width: 14px;
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-weight: 700;
+}
+
+.zafu-ens-name {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.zafu-ens-arrow {
+  color: var(--muted);
+}
+
+.zafu-hidden { display: none !important; }
+
+/* ===== MALICIOUS state ===== */
+
+.zafu-state-malicious {
+  border-color: var(--malicious);
+}
+
+.zafu-state-malicious .zafu-modal-title {
+  color: var(--malicious);
+}
+
+.zafu-modal-subtitle {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.zafu-info-box.malicious {
+  background: var(--malicious-bg);
+  border-color: rgba(139, 18, 18, 0.35);
+  color: #e8a0a0;
+}
+
+.zafu-btn-malicious-cancel {
+  background: var(--malicious);
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.zafu-btn-malicious-cancel:hover {
+  opacity: 0.88;
+}
+
+/* ===== FLAGGED state ===== */
+
+.zafu-state-flagged {
+  border-color: var(--warn);
+}
+
+.zafu-state-flagged .zafu-modal-title {
+  color: var(--warn);
+}
+
+.zafu-info-box.warn {
+  background: var(--warn-bg);
+  border-color: rgba(201, 140, 16, 0.25);
+}
+
+.zafu-checkbox-warning {
+  background: var(--warn-bg);
+  border-color: rgba(245, 165, 36, 0.25);
+}
+
+/* ===== Flag report button (inside UNKNOWN/SUSPICIOUS modals) ===== */
+
+.zafu-flag-row {
+  text-align: center;
+  padding: 8px 16px 4px;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+
+.zafu-flag-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.15s;
+}
+
+.zafu-flag-btn:hover {
+  color: var(--warn);
+}

@@ -1,0 +1,11 @@
+{
+  "_schema": "1",
+  "_description": "Solana scam/phishing address blocklist. Exact-match lookup (case-sensitive base58). Refreshed weekly by .github/workflows/update-scam-db.yml (Solana target — pending, see DEV_PLAN v2).",
+  "_sources": [
+    "https://github.com/scamsniffer/scam-database (solana.json)",
+    "SolPhishHunter — arxiv 2505.04094 — documented gang root wallets",
+    "https://goplussecurity.medium.com/exposing-solana-scammers-scams-and-phishing-b5a4e0ca2676"
+  ],
+  "updatedAt": "2026-04-20",
+  "addresses": []
+}
