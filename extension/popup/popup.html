@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zafu</title>
+  <link rel="icon" type="image/png" href="../icons/icon48.png" />
+  <link rel="stylesheet" href="../shared/tokens.css" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+
+  <header>
+    <div class="header-brand">
+      <img class="logo-mark" src="../icons/icon.svg" width="16" height="16" alt="" aria-hidden="true" />
+      <div class="brand-copy">
+        <span class="logo-text">Zafu</span>
+        <span class="tagline">Recipient memory before every send</span>
+      </div>
+    </div>
+    <div class="header-controls">
+      <button class="ctrl-btn" id="open-guide-btn" title="How it works" aria-label="How it works">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </button>
+      <button class="ctrl-btn" id="open-safety-btn" title="Security" aria-label="Security">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </button>
+      <button class="ctrl-btn" id="open-settings-btn" title="Settings" aria-label="Settings">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Pin banner — didactic -->
+  <div id="pin-banner" class="pin-banner hidden">
+    <div class="pin-banner-title">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5M9 10.76V6a3 3 0 116 0v4.76a2 2 0 00.79 1.58l1.21.92a2 2 0 01.79 1.58V17H6.21V14.84a2 2 0 01.79-1.58l1.21-.92A2 2 0 009 10.76z"/></svg>
+      <span>Pin Zafu for 1-click access</span>
+      <button id="pin-banner-dismiss" class="pin-dismiss" aria-label="Snooze 3 days">✕</button>
+    </div>
+    <ol class="pin-steps">
+      <li><span class="pin-step-num">1</span> Click the puzzle icon
+        <svg class="pin-inline-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 01-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 10-3.214 3.214c.446.166.855.497.925.968a.979.979 0 01-.276.837l-1.61 1.61a2.404 2.404 0 01-1.705.707 2.402 2.402 0 01-1.704-.706l-1.568-1.568a1.026 1.026 0 00-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 11-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 00-.289-.877l-1.568-1.568A2.402 2.402 0 012 12c0-.617.236-1.234.706-1.704L4.316 8.69c.22-.22.52-.326.837-.276.47.07.802.48.968.925a2.501 2.501 0 103.214-3.214c-.446-.166-.855-.497-.925-.968a.979.979 0 01.276-.837l1.61-1.61a2.404 2.404 0 011.705-.707c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 113.237 3.237c-.464.18-.894.527-.967 1.02z"/></svg>
+        in the Chrome toolbar</li>
+      <li><span class="pin-step-num">2</span> Find <strong>Zafu</strong> in the list</li>
+      <li><span class="pin-step-num">3</span> Click the pin
+        <svg class="pin-inline-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5M9 10.76V6a3 3 0 116 0v4.76a2 2 0 00.79 1.58l1.21.92a2 2 0 01.79 1.58V17H6.21V14.84a2 2 0 01.79-1.58l1.21-.92A2 2 0 009 10.76z"/></svg>
+        next to Zafu</li>
+    </ol>
+  </div>
+
+  <!-- Setup checklist — shown until all steps complete -->
+  <div id="setup-checklist" class="setup-checklist hidden">
+    <div class="setup-checklist-title">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      Set up recipient memory
+    </div>
+    <ul class="setup-steps-list">
+      <li class="setup-step setup-step--done" id="step-installed">
+        <span class="setup-step-check">✓</span>
+        <span class="setup-step-label">Extension installed</span>
+      </li>
+      <li class="setup-step" id="step-wallet">
+        <span class="setup-step-check">○</span>
+        <span class="setup-step-label">Save first recipient</span>
+        <button class="btn-ghost small setup-step-action" id="step-wallet-btn" type="button">Add →</button>
+      </li>
+      <li class="setup-step setup-step--locked" id="step-fetch">
+        <span class="setup-step-check">○</span>
+        <span class="setup-step-label">Optional: import wallet history</span>
+        <button class="btn-ghost small setup-step-action" id="step-fetch-btn" type="button">Import →</button>
+      </li>
+      <li class="setup-step" id="step-try">
+        <span class="setup-step-check">○</span>
+        <span class="setup-step-label">Try Transfer Check</span>
+        <a id="step-try-link" href="#" class="btn-ghost small setup-step-action">Try it →</a>
+      </li>
+      <li class="setup-step" id="step-sync">
+        <span class="setup-step-check">○</span>
+        <span class="setup-step-label">Optional: sync across Chrome profiles</span>
+        <button class="btn-ghost small setup-step-action" id="step-sync-btn" type="button">Settings →</button>
+      </li>
+    </ul>
+  </div>
+
+  <div class="app-shell">
+
+    <button id="open-full-view-btn" class="full-view-btn" type="button">Open Full View ↗</button>
+
+    <!-- 3 primary tabs -->
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="book">Recipients</button>
+      <button class="tab-btn" data-tab="wallets">Wallets</button>
+      <button class="tab-btn" data-tab="community">Community</button>
+    </nav>
+
+    <!-- Tab content area -->
+    <div class="tab-area">
+
+      <!-- ===== WALLETS TAB ===== -->
+      <div id="tab-wallets" class="tab-panel">
+
+        <section id="audit-section" class="hidden">
+          <div class="audit-alert">
+            <span class="audit-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </span>
+            <div>
+              <div class="audit-title">Suspicious addresses found in history</div>
+              <p id="audit-summary" class="audit-body"></p>
+              <button id="view-audit-btn" class="btn-ghost small">View details</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="wallets-section">
+          <div class="section-header">
+            <h2>Wallets</h2>
+            <div class="header-actions">
+              <button id="toggle-add-btn" class="btn-ghost small">+ Add</button>
+            </div>
+          </div>
+
+          <div id="protection-status" class="protection-status hidden"></div>
+
+          <div id="add-wallet-form-container" class="hidden">
+            <form id="add-wallet-form" autocomplete="off">
+              <div class="field">
+                <label for="wallet-address">Public address</label>
+                <input id="wallet-address" type="text" placeholder="0x... Solana, or TRON address" spellcheck="false" required />
+              </div>
+              <div class="field">
+                <label for="wallet-label">Name (optional)</label>
+                <input id="wallet-label" type="text" placeholder="e.g. My MetaMask" />
+              </div>
+              <p class="field-hint">Public address only. Zafu imports wallet history to suggest recipients you have sent to before; it cannot connect to the wallet or move funds.</p>
+              <button type="submit" class="btn-primary">Import wallet history</button>
+              <p id="probe-status" class="field-hint hidden"></p>
+              <p id="add-error" class="error hidden"></p>
+            </form>
+          </div>
+
+          <ul id="wallet-list"></ul>
+          <div id="no-wallets" class="empty-state hidden">
+            <p class="empty-state-title">Zafu is already active.</p>
+            <p class="empty-state-desc">Zafu can work from manually saved recipients. Import a public wallet later if you want recipient suggestions from past sends.</p>
+            <button id="empty-add-wallet-btn" class="btn-primary" type="button">+ Import wallet history</button>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===== BOOK TAB ===== -->
+      <div id="tab-book" class="tab-panel active">
+
+        <section id="address-book-section">
+          <div class="section-header">
+            <h2>Recipients</h2>
+            <div class="header-actions">
+            </div>
+          </div>
+
+          <div id="add-contact-form-container" class="hidden">
+            <form id="add-contact-form" autocomplete="off">
+              <div class="field">
+                <label for="contact-address">Address</label>
+                <input id="contact-address" type="text" placeholder="0x... Solana, or TRON address" spellcheck="false" required />
+              </div>
+              <div class="field">
+                <label for="contact-label">Name <span class="required-star">*</span></label>
+                <input id="contact-label" type="text" placeholder="e.g. Alice, Binance deposit…" required />
+              </div>
+              <div class="field">
+                <label for="contact-asset-type">Asset type</label>
+                <select id="contact-asset-type" class="chain-select">
+                  <option value="stablecoin" selected>Stablecoin (USDT/USDC)</option>
+                  <option value="token">Other token</option>
+                </select>
+              </div>
+              <div class="field" id="contact-asset-field">
+                <label for="contact-asset">Asset</label>
+                <select id="contact-asset" class="chain-select">
+                  <option value="USDT" selected>USDT</option>
+                  <option value="USDC">USDC</option>
+                  <option value="">Not sure yet</option>
+                </select>
+              </div>
+              <div class="field hidden" id="contact-token-field">
+                <label for="contact-token-symbol">Token symbol</label>
+                <input id="contact-token-symbol" type="text" placeholder="e.g. ARB, PEPE" maxlength="12" autocomplete="off" />
+              </div>
+              <div class="field">
+                <label for="contact-chain">Network</label>
+                <select id="contact-chain" class="chain-select">
+                  <option value="1">Ethereum</option>
+                  <option value="137">Polygon</option>
+                  <option value="42161">Arbitrum One</option>
+                  <option value="8453">Base</option>
+                  <option value="10">Optimism</option>
+                  <option value="56">BNB Chain</option>
+                  <option value="solana">Solana</option>
+                  <option value="tron">TRON</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="contact-notes">Notes (optional)</label>
+                <input id="contact-notes" type="text" placeholder="Any context…" />
+              </div>
+              <button type="submit" class="btn-primary">Save Contact</button>
+              <p id="add-contact-error" class="error hidden"></p>
+            </form>
+          </div>
+
+          <div class="contacts-filter-row">
+            <button id="toggle-add-contact-btn" class="btn-primary small" type="button">+ Contact</button>
+            <select id="contacts-wallet-filter" class="contacts-wallet-select">
+              <option value="all">All wallets</option>
+            </select>
+            <input id="search-input" type="text" placeholder="Search contacts or addresses…" class="search" />
+          </div>
+
+          <section id="popup-receive-safely" class="receive-safely-mini">
+            <button id="popup-receive-toggle" class="btn-ghost small receive-safely-toggle" type="button">Receive Instruction</button>
+            <div id="popup-receive-panel" class="receive-safely-panel hidden">
+              <div class="receive-safely-row">
+                <select id="popup-receive-asset" aria-label="Receive asset">
+                  <option value="USDT" selected>USDT</option>
+                  <option value="USDC">USDC</option>
+                </select>
+                <select id="popup-receive-network" aria-label="Receive network">
+                  <option value="tron" selected>TRON/TRC-20</option>
+                  <option value="1">Ethereum/ERC-20</option>
+                  <option value="8453">Base</option>
+                  <option value="137">Polygon</option>
+                  <option value="42161">Arbitrum</option>
+                  <option value="10">Optimism</option>
+                  <option value="56">BNB/BEP-20</option>
+                  <option value="solana">Solana</option>
+                </select>
+              </div>
+              <select id="popup-receive-wallet" aria-label="Receiving wallet"></select>
+              <button id="popup-receive-build" class="btn-primary small" type="button">Build instruction</button>
+              <p id="popup-receive-error" class="error hidden"></p>
+              <div id="popup-receive-output-wrap" class="receive-safely-output hidden">
+                <textarea id="popup-receive-output" readonly></textarea>
+                <button id="popup-receive-copy" class="btn-ghost small" type="button">Copy instruction</button>
+              </div>
+            </div>
+          </section>
+
+          <div id="no-addresses" class="empty-state hidden">
+            <p class="empty-state-title">Start your recipient memory.</p>
+            <p class="empty-state-desc">Save who you pay and the asset/network route they use. Wallet history import can suggest recipients later.</p>
+            <div class="empty-state-actions">
+              <button id="empty-add-contact-btn" class="btn-primary" type="button">+ Add contact</button>
+              <button id="empty-sync-wallet-btn" class="btn-ghost small" type="button">Import wallet history</button>
+            </div>
+          </div>
+
+          <div id="trusted-block">
+            <div class="block-header">
+              <span class="block-title">Trusted</span>
+              <span id="trusted-count" class="block-count"></span>
+            </div>
+            <div id="no-trusted" class="empty-state hidden">
+              <p class="empty-state-title">No trusted addresses yet.</p>
+              <p class="empty-state-desc">Add a contact manually or import wallet history to find familiar recipients from your own sends.</p>
+              <div class="empty-state-actions">
+                <button id="empty-trusted-add-contact-btn" class="btn-primary" type="button">+ Add contact</button>
+                <button id="empty-goto-wallets-btn" class="btn-ghost small" type="button">Import wallet history</button>
+              </div>
+            </div>
+            <ul id="trusted-list"></ul>
+          </div>
+
+          <div id="suspicion-block">
+            <div class="block-header">
+              <span class="block-title block-title--warn">Suspicious</span>
+              <span id="suspicion-count" class="block-count"></span>
+              <button id="show-suspicion-btn" class="btn-ghost small ml-auto">Show</button>
+            </div>
+            <p class="block-desc">Addresses that appeared in your history but you never actively sent to. Cannot be mistaken for trusted contacts.</p>
+            <ul id="suspicion-list" class="hidden"></ul>
+          </div>
+
+        </section>
+
+      </div>
+
+      <!-- ===== COMMUNITY TAB ===== -->
+      <div id="tab-community" class="tab-panel">
+
+        <section class="community-section">
+          <h2>Community Warnings</h2>
+          <p class="field-hint">Zafu downloads community warning signals and checks them during crypto-address pastes. This is a warning feed, not a browsable address directory.</p>
+          <div id="community-locked" class="hidden"></div>
+          <div id="community-unlocked" class="hidden">
+            <div class="community-stat-row">
+              <span id="community-list-count" class="community-stat-value">—</span>
+              <span id="community-list-label" class="community-stat-label">community warning feed</span>
+            </div>
+            <p id="community-list-delta" class="field-hint community-stat-delta hidden"></p>
+            <p id="community-pending-reports" class="field-hint community-pending hidden"></p>
+            <p id="community-personal-stat" class="field-hint community-personal hidden"></p>
+            <p class="field-hint">The feed is loaded locally and checked automatically on every crypto-address paste alongside Zafu's bundled risk data. You do not need to contribute reports to receive these warnings.</p>
+          </div>
+        </section>
+
+        <section class="community-section">
+          <h2>How this works</h2>
+          <ul class="community-how-list field-hint">
+            <li><strong>Warning feed</strong> — downloaded automatically and checked during Transfer Check.</li>
+            <li><strong>Manual reports</strong> — when signed in, tap "Report as malicious" on an unknown address overlay to submit that suspected attacker address and signal type.</li>
+            <li><strong>Opt-in automatic contribution</strong> — when signed in and enabled, only suspected attacker-pattern addresses from wallet-history dust or trusted external confirmations may be submitted.</li>
+            <li><strong>Threshold review</strong> — community-only addresses must cross a signal threshold and stay explainable before warning other users.</li>
+            <li><strong>Sign in to contribute and back up</strong> — warning downloads work anonymously; verified sign-in prevents one installation from spoofing the shared report threshold.</li>
+          </ul>
+          <p class="field-hint"><a id="community-methodology-link" href="https://stayzafu.com/community-signals" class="link-text">Read the Community Signals methodology →</a></p>
+        </section>
+
+        <section class="community-section">
+          <div class="section-header">
+            <h2>Contribute automatic threat signals</h2>
+            <label class="toggle-switch">
+              <input type="checkbox" id="community-threat-signals-toggle" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <p class="field-hint">Off by default. When signed in and enabled, suspected attacker addresses from wallet-history dust or trusted external confirmations may be submitted with a random install ID and verified account ID for abuse prevention. Your wallet, contacts, labels, notes, clipboard text, chat text, and URLs are not submitted. Signed-out flags stay local.</p>
+        </section>
+
+        <section class="community-section" id="community-account-section">
+          <h2>Back up your Zafu recipient memory</h2>
+          <p class="field-hint field-hint--mb">Sign in to recover saved wallets, trusted contacts, labels, and notes when you reinstall Chrome or switch computers.</p>
+          <div id="community-signed-out">
+            <button id="community-sign-in-btn" class="btn-google" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+              Sign in with Google
+            </button>
+            <p id="community-sign-in-error" class="error hidden"></p>
+          </div>
+          <div id="community-signed-in" class="hidden">
+            <div class="account-row">
+              <img id="community-account-avatar" class="account-avatar" src="" alt="" width="28" height="28" />
+              <div class="account-info">
+                <div id="community-account-name" class="account-name"></div>
+                <div id="community-account-email" class="account-email"></div>
+              </div>
+              <button id="community-sign-out-btn" class="btn-ghost small" type="button">Sign out</button>
+            </div>
+            <p id="community-sync-status" class="field-hint">Sync on — saved wallets and trusted contacts are backed up.</p>
+          </div>
+        </section>
+
+        <section class="community-section">
+          <h2>Share Zafu</h2>
+          <p class="field-hint">Help protect others in your network.</p>
+          <button id="community-share-btn" class="btn-share-zafu" type="button">Share Zafu</button>
+        </section>
+
+
+      </div>
+
+    </div><!-- end .tab-area -->
+
+    <!-- ===== OVERLAY: GUIDE ===== -->
+    <div id="panel-guide" class="overlay-panel">
+      <div class="panel-header">
+        <span class="panel-title">How it works</span>
+        <button class="ctrl-btn panel-close" data-panel="guide" aria-label="Close panel">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="panel-body">
+
+        <section class="guide-section">
+          <h2>What Zafu Does</h2>
+          <p class="guide-text">Zafu is recipient memory for stablecoin sends. It organizes who you pay, which route they use, and what Transfer Check can confirm before an address reaches a wallet, exchange, or dapp field.</p>
+          <a id="try-zafu-link" href="https://stayzafu.com/test" class="btn-ghost small guide-try-btn">See Zafu in action →</a>
+        </section>
+
+        <section class="guide-section">
+          <h2>Recipient Confidence</h2>
+          <p class="guide-text">Every trusted recipient shows one state, computed from your local send history: <strong>Known recipient</strong> (you confirmed a send here), <strong>Checked route</strong> (history synced from another device), <strong>Needs test</strong> (send a small test first), <strong>Saved instruction</strong> (partial route saved), or <strong>Review</strong> (mismatch, stale, or lookalike — check before sending). Marking a send flips <strong>Needs test → Known recipient</strong>.</p>
+        </section>
+
+        <section class="guide-section">
+          <h2>Transfer Check</h2>
+          <p class="guide-text">Every paste runs through 5 layers in order. First match wins.</p>
+          <ol class="guide-steps">
+            <li><strong>Clipboard guard</strong> — pasted address differs from the last same-chain browser copy → Possible Clipboard Mismatch review. No network needed.</li>
+            <li><strong>Your history</strong> — trusted (you sent to) and suspicious (sent to you uninvited) addresses from your wallet transactions. Fully local.</li>
+            <li><strong>Curated blocklist</strong> — 10,000+ confirmed scam addresses bundled and refreshed weekly from ScamSniffer. No network needed.</li>
+            <li><strong>Community warnings</strong> — crowd-sourced attacker addresses flagged by Zafu users. Fetched on startup, updated every 24h.</li>
+            <li><strong>GoPlus Security</strong> — real-time on-chain reputation API for EVM addresses. Last-resort check when all local layers return unknown.</li>
+          </ol>
+        </section>
+
+        <section class="guide-section">
+          <h2>Getting Started</h2>
+          <ol class="guide-steps">
+            <li><strong>Wallets →</strong> Add your public wallet address. Zafu cannot connect to it or move funds.</li>
+            <li>Zafu scans public history: recipients you sent to become <strong>Trusted</strong>; unexpected inbound or dust addresses stay <strong>Suspicious</strong>.</li>
+            <li>Mark repeat recipients as <strong>Favorites</strong> and run <strong>Intel</strong> on important contacts before high-value sends.</li>
+            <li>Zafu runs automatically on supported sites — just paste as normal.</li>
+          </ol>
+        </section>
+
+        <section class="guide-section">
+          <h2>What You'll See When You Paste</h2>
+          <ul class="guide-states">
+            <li class="guide-state-item guide-state-ok">
+              <span class="guide-state-icon">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <div>
+                <div class="guide-state-title">Green banner — Trusted</div>
+                <div class="guide-state-desc">Address is in your history. Auto-confirms in 2 seconds.</div>
+              </div>
+            </li>
+            <li class="guide-state-item guide-state-warn">
+              <span class="guide-state-icon">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </span>
+              <div>
+                <div class="guide-state-title">Warning modal — Suspicious</div>
+                <div class="guide-state-desc">In your history but you never sent to it. Likely airdrop or spam token.</div>
+              </div>
+            </li>
+            <li class="guide-state-item guide-state-unknown">
+              <span class="guide-state-icon">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </span>
+              <div>
+                <div class="guide-state-title">Confirm modal — Unknown</div>
+                <div class="guide-state-desc">Never seen before. Verify manually before proceeding.</div>
+              </div>
+            </li>
+            <li class="guide-state-item guide-state-danger">
+              <span class="guide-state-icon">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </span>
+              <div>
+                <div class="guide-state-title">Danger — Poisoning</div>
+                <div class="guide-state-desc">Nearly identical to a trusted address. A common scam — do not proceed.</div>
+              </div>
+            </li>
+            <li class="guide-state-item guide-state-danger">
+              <span class="guide-state-icon">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </span>
+              <div>
+                <div class="guide-state-title">Danger — Clipboard hijacked</div>
+                <div class="guide-state-desc">What you copied ≠ what's about to paste. Malware likely.</div>
+              </div>
+            </li>
+            <li class="guide-state-item guide-state-blocked">
+              <span class="guide-state-icon">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+              </span>
+              <div>
+                <div class="guide-state-title">Blocked — Known scam</div>
+                <div class="guide-state-desc">Flagged in our blocklist. Cannot be overridden.</div>
+              </div>
+            </li>
+            <li class="guide-state-item guide-state-malicious">
+              <span class="guide-state-icon">🚫</span>
+              <div>
+                <div class="guide-state-title">Verified Malicious</div>
+                <div class="guide-state-desc">Team-curated or independently confirmed threat. Bypassable only with explicit override.</div>
+              </div>
+            </li>
+            <li class="guide-state-item guide-state-flagged">
+              <span class="guide-state-icon">🚩</span>
+              <div>
+                <div class="guide-state-title">Community Reported</div>
+                <div class="guide-state-desc">Reported by Zafu users or automated poisoning signals. High risk, but not team-confirmed.</div>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section class="guide-section">
+          <h2>Transfer Check Evidence</h2>
+          <p class="guide-text">Shows observed, checked, warned, and not-checked transfer evidence after Zafu runs detection: asset and network hints when visible, copied-address match, source evidence, threat signals, and the full address before paste. When the address matches a saved recipient, it names them and reminds you of the route. You can tune the help level in Settings.</p>
+        </section>
+
+        <section class="guide-section">
+          <h2>Address Intel</h2>
+          <p class="guide-text">Run <strong>Intel</strong> on a contact to review identity and reputation with your own explorer keys: EOA vs contract, verified status, known labels, balance, and risk signals. Intel is local — keys stay on this device. Open the full view to work through contacts by review status.</p>
+        </section>
+
+        <section class="guide-section">
+          <h2>Trusted vs. Suspicious</h2>
+          <p class="guide-text"><strong class="text-ok">Trusted</strong> — addresses you have actively sent funds or tokens to. These carry a confidence state (Known recipient, Checked route, and so on) from your local send history and sync provenance.</p>
+          <p class="guide-text guide-text--mt"><strong class="text-warn">Suspicious</strong> — addresses in your history you never initiated a send to (airdrops, dust attacks, inbound transfers). These trigger a warning modal. Can be promoted to trusted after labelling.</p>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ===== OVERLAY: SAFETY ===== -->
+    <div id="panel-safety" class="overlay-panel">
+      <div class="panel-header">
+        <span class="panel-title">Security</span>
+        <button class="ctrl-btn panel-close" data-panel="safety" aria-label="Close panel">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="panel-body">
+
+        <section class="guide-section">
+          <h2>Install Fingerprint</h2>
+          <div class="about-grid">
+            <div class="about-row">
+              <span class="about-label">Version</span>
+              <span id="ext-version" class="about-value">—</span>
+            </div>
+            <div class="about-row about-row--fingerprint">
+              <span class="about-label">Fingerprint</span>
+              <span id="ext-fingerprint" class="about-value mono muted">computing…</span>
+            </div>
+          </div>
+          <a id="verify-link" href="#" class="verify-link">Compare on GitHub Releases ↗</a>
+          <p class="field-hint">16-char hash of Zafu's security-critical files and bundled risk data. Matches published hash = unmodified install.</p>
+        </section>
+
+        <section class="guide-section">
+          <h2>Capabilities</h2>
+          <table class="safety-table">
+            <tr>
+              <td class="safety-can">
+                <svg class="safety-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                See your public wallet address
+              </td>
+              <td class="safety-cannot">
+                <svg class="safety-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Access private keys or seed phrases
+              </td>
+            </tr>
+            <tr>
+              <td class="safety-can">
+                <svg class="safety-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Read public explorer transaction history
+              </td>
+              <td class="safety-cannot">
+                <svg class="safety-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Sign or send transactions
+              </td>
+            </tr>
+            <tr>
+              <td class="safety-can">
+                <svg class="safety-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Intercept address-shaped pastes
+              </td>
+              <td class="safety-cannot">
+                <svg class="safety-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Move or access your funds
+              </td>
+            </tr>
+            <tr>
+              <td class="safety-can">
+                <svg class="safety-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Store data locally on device
+              </td>
+              <td class="safety-cannot">
+                <svg class="safety-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Share private labels or notes without optional sign-in
+              </td>
+            </tr>
+          </table>
+        </section>
+
+        <section class="guide-section">
+          <h2>Permissions</h2>
+          <ul class="safety-perms">
+            <li><span class="perm-name">storage</span> — saves wallet list, address index, settings, and local community cache</li>
+            <li><span class="perm-name">alarms</span> — schedules 24h refreshes for opted-in wallets and community intelligence</li>
+            <li><span class="perm-name">identity</span> — optional Google Sign-In for address-book backup and restore</li>
+          </ul>
+          <p class="field-hint">No <code>webRequest</code>, no <code>nativeMessaging</code>, no wallet API access. 3 permissions vs the average extension's 17.</p>
+        </section>
+
+        <section class="guide-section">
+          <h2>Network Mode</h2>
+          <p class="guide-text">No advertising tracking or error reporting. Optional Network Mode shares anonymous aggregate counts only, never addresses, labels, clipboard text, chat text, URLs, balances, transaction hashes, Google ID, or email. Your labels, notes, and trusted contacts stay local unless you choose Google Sign-In for address-book backup.</p>
+          <p class="guide-text guide-text--mt">Community reports are separate from Network Mode. When signed in, manual reports and opt-in automatic contribution can share suspected attacker addresses and signal types with a random install ID and verified account ID for abuse prevention. Signed-out flags stay local. Your wallet, contacts, labels, notes, clipboard text, chat text, and URLs are not submitted.</p>
+          <p class="guide-text guide-text--mt">Signing in with Google (optional) sends your name and email to our servers to create your account and back up saved wallets, trusted contacts, labels, and notes. Detection indexes are never account-synced. Verifiable at <a id="github-link" href="#" class="link-text">github.com/jimozo/zafu-extension</a>.</p>
+        </section>
+
+        <section class="guide-section">
+          <h2>Found a Vulnerability?</h2>
+          <p class="guide-text">Email <strong>security@stayzafu.com</strong> before public disclosure. We respond within 48 hours.</p>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ===== OVERLAY: SETTINGS ===== -->
+    <div id="panel-settings" class="overlay-panel">
+      <div class="panel-header">
+        <span class="panel-title">Settings</span>
+        <button class="ctrl-btn panel-close" data-panel="settings" aria-label="Close panel">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="panel-body">
+
+        <section id="transfer-check-section">
+          <div class="section-header">
+            <h2>Transfer Check</h2>
+            <label class="toggle-switch">
+              <input type="checkbox" id="transfer-check-toggle" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <p class="field-hint">Shows observed, checked, warned, and not-checked transfer evidence before crypto-address pastes. Useful for stablecoin sends, CEX withdrawals, and high-value transfers.</p>
+        </section>
+
+        <section id="transfer-help-section">
+          <h2>Help Level</h2>
+          <p class="field-hint">Controls Transfer Check detail. Critical warnings are never hidden.</p>
+          <div class="mode-select" role="radiogroup" aria-label="Transfer Check help level">
+            <label class="mode-option">
+              <input type="radio" name="transfer-help-mode" value="guided" />
+              <span>Guided</span>
+            </label>
+            <label class="mode-option">
+              <input type="radio" name="transfer-help-mode" value="standard" />
+              <span>Standard</span>
+            </label>
+            <label class="mode-option">
+              <input type="radio" name="transfer-help-mode" value="operator" />
+              <span>Operator</span>
+            </label>
+          </div>
+        </section>
+
+        <section id="network-mode-section">
+          <div class="section-header">
+            <h2>Network Mode</h2>
+            <label class="toggle-switch">
+              <input type="checkbox" id="network-mode-toggle" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <p class="field-hint">Shares anonymous aggregate counts only: Transfer Checks, warning states, Telegram matches, chain types, contacts saved, wallet imports, and Intel actions. Never shares addresses, labels, clipboard text, chat text, URLs, balances, transaction hashes, Google ID, or email.</p>
+          <p id="network-mode-status" class="field-hint hidden"></p>
+        </section>
+
+        <section id="account-section">
+          <h2>Back up your Zafu recipient memory</h2>
+          <p class="field-hint field-hint--mb">Sign in to sync trusted address memory across Chrome profiles. Network Mode does not require Google sign-in.</p>
+
+          <!-- Anonymous state -->
+          <div id="account-signed-out">
+            <button id="sign-in-btn" class="btn-google" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+              Sign in with Google
+            </button>
+            <p id="sign-in-error" class="error hidden"></p>
+          </div>
+
+          <!-- Signed-in state -->
+          <div id="account-signed-in" class="hidden">
+            <div class="account-row">
+              <img id="account-avatar" class="account-avatar" src="" alt="" width="28" height="28" />
+              <div class="account-info">
+                <div id="account-name" class="account-name"></div>
+                <div id="account-email" class="account-email"></div>
+              </div>
+              <button id="sign-out-btn" class="btn-ghost small" type="button">Sign out</button>
+            </div>
+            <p id="account-sync-status" class="field-hint">Sync on — saved wallets and trusted contacts are backed up.</p>
+          </div>
+        </section>
+
+        <section id="settings-section">
+          <h2>Block Explorer API Keys</h2>
+          <p class="field-hint field-hint--mb">Free Etherscan key. Without one, fetches may rate-limit at ~10k tx. One key covers all EVM chains (Ethereum, Polygon, Arbitrum, Base, Optimism, BNB). Solscan key is optional.</p>
+          <div class="field">
+            <label for="api-key-input">Etherscan key</label>
+            <div class="api-key-row">
+              <input id="api-key-input" type="password" placeholder="Paste your Etherscan key" spellcheck="false" />
+              <button id="save-api-key-btn" class="btn-ghost small" type="button">Save</button>
+            </div>
+            <p id="api-key-status" class="muted hidden"></p>
+            <div class="api-intel-actions">
+              <button id="run-etherscan-intel-btn" class="btn-ghost small" type="button">Run EVM Intel</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="solscan-key-input">Solscan key <span class="muted-sm">(optional)</span></label>
+            <div class="api-key-row">
+              <input id="solscan-key-input" type="password" placeholder="Paste your Solscan key" spellcheck="false" />
+              <button id="save-solscan-key-btn" class="btn-ghost small" type="button">Save</button>
+            </div>
+            <p id="solscan-key-status" class="muted hidden"></p>
+            <div class="api-intel-actions">
+              <button id="run-solscan-intel-btn" class="btn-ghost small" type="button">Run Solana Intel</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="tron-key-input">TRON key <span class="muted-sm">(optional)</span></label>
+            <div class="api-key-row">
+              <input id="tron-key-input" type="password" placeholder="Paste your TronScan key" spellcheck="false" />
+              <button id="save-tron-key-btn" class="btn-ghost small" type="button">Save</button>
+            </div>
+            <p id="tron-key-status" class="muted hidden"></p>
+            <div class="api-intel-actions">
+              <button id="run-tronscan-intel-btn" class="btn-ghost small" type="button">Run TRON Intel</button>
+            </div>
+          </div>
+          <div class="api-instructions">
+            <p class="field-hint api-instructions-label">Etherscan (EVM)</p>
+            <ol class="instructions">
+              <li>Open <a id="etherscan-link" href="#" class="link-text">etherscan.io/apidashboard</a> and sign in (free account).</li>
+              <li>Click <strong>Add</strong> to create a new API key. Name it anything (e.g. "Zafu").</li>
+              <li>Copy the key and paste it in the Etherscan field above.</li>
+            </ol>
+            <p class="field-hint">Free tier: 5 calls/sec, 100,000 calls/day. Zafu only sends your public wallet address to the explorer.</p>
+            <p class="field-hint api-instructions-label api-instructions-label--section">Solscan (Solana)</p>
+            <ol class="instructions">
+              <li>Open <a id="solscan-link" href="#" class="link-text">pro-api.solscan.io</a> and create a free account.</li>
+              <li>Go to <strong>Dashboard → API Keys</strong> and click <strong>New Key</strong>.</li>
+              <li>Copy the key and paste it in the Solscan field above.</li>
+            </ol>
+            <p class="field-hint">Free tier: ~10 req/s. Zafu only sends your public wallet address to Solscan.</p>
+            <p class="field-hint api-instructions-label api-instructions-label--section">TronScan (TRON)</p>
+            <ol class="instructions">
+              <li>Open <a id="tron-link" href="#" class="link-text">tronscan.org API Keys</a> and sign in (free account).</li>
+              <li>Click <strong>Add</strong> to create a new API key. Name it anything (e.g. "Zafu").</li>
+              <li>Copy the key and paste it in the TRON field above.</li>
+            </ol>
+            <p class="field-hint">TronScan now requires an API key for requests. Zafu only sends your public wallet address to TronScan.</p>
+          </div>
+        </section>
+
+        <section id="clear-data-section">
+          <h2>Clear all local data</h2>
+          <p class="field-hint field-hint--mb">Resets wallets, contacts, settings, local metrics, cached community data, pending reports, account state, and session data on this device. It does not delete already-submitted community reports or server-side backups synced while signed in.</p>
+          <button id="clear-local-data-btn" class="btn-danger small" type="button">Clear all local data</button>
+          <p id="clear-local-data-status" class="field-hint hidden"></p>
+        </section>
+
+      </div>
+    </div>
+
+  </div><!-- end .app-shell -->
+
+  <script src="popup.js" type="module"></script>
+</body>
+</html>
